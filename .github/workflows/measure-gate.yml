@@ -1,0 +1,65 @@
+name: measure-gate
+
+on:
+  push:
+  pull_request:
+  workflow_dispatch:
+    inputs:
+      profile:
+        description: Measure profile from config/measure_profiles.json
+        required: true
+        default: ci-all-strategies
+        type: choice
+        options:
+          - ci-all-strategies
+          - ci-pipeline-only
+          - ci-guardrails-eval
+
+jobs:
+  measure-profiles:
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        profile:
+          - ci-all-strategies
+          - ci-pipeline-only
+          - ci-guardrails-eval
+    steps:
+      - uses: actions/checkout@v4
+      - name: Build image
+        run: docker build -t guardrails-strategies:ci .
+      - name: Run measure profile
+        run: |
+          mkdir -p reports
+          PROFILE="${{ matrix.profile }}"
+          if [ "${PROFILE}" = "ci-guardrails-eval" ]; then
+            CMD="evaluate-pipeline"
+          else
+            CMD="measure"
+          fi
+          docker run --rm -v "$PWD/reports:/reports" guardrails-strategies:ci \
+            "${CMD}" --profile "${PROFILE}" \
+            --output "/reports/measure-${PROFILE}.json"
+      - name: Quality gate
+        run: |
+          docker run --rm -v "$PWD/reports:/reports" guardrails-strategies:ci \
+            check-measure --profile "${{ matrix.profile }}" \
+            --report "/reports/measure-${{ matrix.profile }}.json"
+      - name: Upload measure report
+        uses: actions/upload-artifact@v4
+        with:
+          name: measure-${{ matrix.profile }}
+          path: reports/measure-${{ matrix.profile }}.json
+
+  unit-tests:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+      - name: Install and test
+        run: |
+          pip install -e .
+          python -m unittest discover -s tests -v

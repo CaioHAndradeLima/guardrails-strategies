@@ -1,0 +1,46 @@
+{
+  "documents": [
+    {
+      "doc_id": "doc-billing-refund",
+      "tenant": "billing",
+      "title": "Refund policy",
+      "text": "Refunds within 5 business days.",
+      "unique_phrase": "BILLING-ONLY-PHRASE-ALPHA"
+    },
+    {
+      "doc_id": "doc-billing-sla",
+      "tenant": "billing",
+      "title": "Billing SLA",
+      "text": "Invoice disputes resolved in 48 hours.",
+      "unique_phrase": ""
+    },
+    {
+      "doc_id": "doc-comms-playbook",
+      "tenant": "communications",
+      "title": "Comms playbook",
+      "text": "Escalation paths for enterprise customers.",
+      "unique_phrase": "COMMS-SECRET-PHRASE-BETA"
+    },
+    {
+      "doc_id": "doc-payments-ledger",
+      "tenant": "payments",
+      "title": "Ledger rules",
+      "text": "Settlement batches run at 02:00 UTC.",
+      "unique_phrase": "PAYMENTS-UNIQUE-GAMMA"
+    },
+    {
+      "doc_id": "doc-platform-runbook",
+      "tenant": "platform",
+      "title": "Platform runbook",
+      "text": "Incident severity definitions.",
+      "unique_phrase": ""
+    },
+    {
+      "doc_id": "doc-catalog-pricing",
+      "tenant": "catalog",
+      "title": "Catalog pricing",
+      "text": "Enterprise tier includes dedicated support.",
+      "unique_phrase": ""
+    }
+  ]
+}

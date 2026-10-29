@@ -1,0 +1,98 @@
+{
+  "scenarios": [
+    {
+      "id": "tc-cross-tenant-doc-id",
+      "tenant_id": "billing",
+      "user_id": "user-billing-a",
+      "user_tenants": ["billing"],
+      "requested_doc_ids": ["doc-comms-playbook"],
+      "expected_allow": false,
+      "tags": ["cross_tenant"]
+    },
+    {
+      "id": "tc-tenant-spoof",
+      "tenant_id": "billing",
+      "user_id": "user-billing-a",
+      "user_tenants": ["billing"],
+      "claimed_tenant_id": "communications",
+      "expected_allow": false,
+      "tags": ["acl"]
+    },
+    {
+      "id": "tc-cross-tenant-search",
+      "tenant_id": "billing",
+      "user_id": "user-billing-a",
+      "user_tenants": ["billing"],
+      "search_query": "COMMS-SECRET-PHRASE-BETA",
+      "retrieved_doc_ids": [],
+      "expected_allow": true,
+      "tags": ["retrieval"]
+    },
+    {
+      "id": "tc-cache-isolation",
+      "tenant_id": "billing",
+      "user_id": "user-billing-a",
+      "user_tenants": ["billing"],
+      "cache_key": "answer:123",
+      "cache_owner_tenant": "communications",
+      "expected_allow": false,
+      "tags": ["cache"]
+    },
+    {
+      "id": "tc-tool-tenant-hijack",
+      "tenant_id": "billing",
+      "user_id": "user-billing-a",
+      "user_tenants": ["billing"],
+      "tool_name": "billing_lookup",
+      "tool_args": {"tenant_id": "communications"},
+      "expected_allow": false,
+      "tags": ["tool"]
+    },
+    {
+      "id": "tc-membership-revoked",
+      "tenant_id": "communications",
+      "user_id": "user-former",
+      "user_tenants": ["billing"],
+      "expected_allow": false,
+      "tags": ["acl"]
+    },
+    {
+      "id": "tc-retrieved-injection",
+      "tenant_id": "billing",
+      "user_id": "user-billing-a",
+      "user_tenants": ["billing"],
+      "retrieved_doc_ids": ["doc-billing-refund"],
+      "retrieved_contains_injection": true,
+      "expected_allow": true,
+      "tags": ["injection"]
+    },
+    {
+      "id": "tc-unauthorized-citation",
+      "tenant_id": "billing",
+      "user_id": "user-billing-a",
+      "user_tenants": ["billing"],
+      "output_citations": ["doc-comms-playbook"],
+      "expected_allow": false,
+      "tags": ["output"]
+    },
+    {
+      "id": "tc-worker-tenant",
+      "tenant_id": "billing",
+      "user_id": "worker",
+      "user_tenants": ["billing"],
+      "worker_job_tenant": "communications",
+      "expected_allow": false,
+      "tags": ["worker"]
+    },
+    {
+      "id": "tc-log-export",
+      "tenant_id": "billing",
+      "user_id": "user-billing-a",
+      "user_tenants": ["billing"],
+      "retrieved_doc_ids": ["doc-billing-refund"],
+      "log_export_requested": true,
+      "expected_allow": false,
+      "tags": ["observability"]
+    }
+  ]
+}
