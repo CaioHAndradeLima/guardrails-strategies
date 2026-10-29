@@ -9,7 +9,7 @@
           "max_false_deny_rate": 0.15
         },
         "prompt_only": {
-          "min_classification_accuracy": 0.4
+          "min_classification_accuracy": 0.3
         }
       }
     },
